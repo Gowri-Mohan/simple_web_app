@@ -104,3 +104,4 @@
 /Users/gowrimohan/Myapp/obj/Debug/net8.0/Myapp.genruntimeconfig.cache
 /Users/gowrimohan/Myapp/obj/Debug/net8.0/ref/Myapp.dll
 /Users/gowrimohan/Myapp/bin/Debug/net8.0/BCrypt.Net-Next.dll
+/Users/gowrimohan/Myapp/bin/Debug/net8.0/System.Security.Permissions.dll
