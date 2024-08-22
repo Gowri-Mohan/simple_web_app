@@ -105,3 +105,8 @@
 /Users/gowrimohan/Myapp/obj/Debug/net8.0/ref/Myapp.dll
 /Users/gowrimohan/Myapp/bin/Debug/net8.0/BCrypt.Net-Next.dll
 /Users/gowrimohan/Myapp/bin/Debug/net8.0/System.Security.Permissions.dll
+/Users/gowrimohan/Myapp/obj/Debug/net8.0/Myapp.MvcApplicationPartsAssemblyInfo.cs
+/Users/gowrimohan/Myapp/bin/Debug/net8.0/Microsoft.OpenApi.dll
+/Users/gowrimohan/Myapp/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/gowrimohan/Myapp/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/gowrimohan/Myapp/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
