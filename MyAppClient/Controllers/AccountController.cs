@@ -82,51 +82,11 @@ namespace MyAppClient.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string token)
+        public async Task<IActionResult> Login(string email, string password)
         {
             try
             {
-                // Decode JWT token to get payload
-                var handler = new JwtSecurityTokenHandler();
-                var jwtToken = handler.ReadJwtToken(token);
-                var email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
-
-                // Fetch user from database using the extracted email
-                var user = await _context.Users.SingleOrDefaultAsync(u => u.EmailId == email);
-
-                if (user == null)
-                {
-                    ModelState.AddModelError(string.Empty, "User not found.");
-                    return View();
-                }
-
-                // Create new claims
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.Name, email),
-                    new Claim(ClaimTypes.Role, user.Role)
-                };
-
-                // Generate JWT token
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var newToken = new JwtSecurityToken(
-                    issuer: _configuration["Jwt:Issuer"],
-                    audience: _configuration["Jwt:Issuer"],
-                    claims: claims,
-                    expires: DateTime.Now.AddMinutes(30),
-                    signingCredentials: creds);
-
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(newToken);
-
-                // Store the new JWT token in a cookie
-                Response.Cookies.Append("jwtToken", tokenString, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true, // Set to true if using HTTPS
-                    SameSite = SameSiteMode.Strict
-                });
+                //HttpClient client =new()
 
                 // Redirect to home page or another secure page
                 return RedirectToAction("Index", "Home");

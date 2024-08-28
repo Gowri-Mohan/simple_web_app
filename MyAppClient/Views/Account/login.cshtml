@@ -21,6 +21,7 @@
             justify-content: center;
             margin: 0;
         }
+
         .login-container {
             background-color: #fff;
             padding: 30px;
@@ -29,22 +30,27 @@
             max-width: 400px;
             width: 100%;
         }
+
         .form-control {
             border-radius: 20px;
         }
+
         .btn-primary {
             border-radius: 20px;
             width: 100%;
         }
+
         h1 {
             font-weight: 700;
             color: #fff;
             text-align: center;
             margin-bottom: 40px;
         }
+
         .card-body {
             padding: 30px;
         }
+
         .text-danger {
             margin-bottom: 20px;
         }
@@ -57,21 +63,24 @@
             <div class="login-container">
                 <div class="card">
                     <div class="card-body">
-                        <form id="loginForm">
-                            <div id="errorMessage" class="text-danger"></div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required />
+                        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                        {
+                            <form id="loginForm">
+                                <div id="errorMessage" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login</button>
+                            </form>
+                            <div class="text-center mt-3">
+                                <small>Don't have an account? <a href="@Url.Action("SignUp", "Account")" class="btn-link">Sign Up</a></small>
                             </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
-                            </div>
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login</button>
-                        </form>
-                        <div class="text-center mt-3">
-                            <small>Don't have an account? <a href="@Url.Action("SignUp", "Account")" class="btn-link">Sign Up</a></small>
-                        </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -83,57 +92,57 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        $("#loginForm").submit(function(event) {
-            event.preventDefault();
+        // $("#loginForm").submit(function (event) {
+        //     event.preventDefault();
 
-            // First AJAX call to authenticate and get the JWT token
-            $.ajax({
-                url: "https://localhost:7057/api/v1/auth/login",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    username: $("#email").val(),  // Sending username to get the token
-                    password: $("#password").val() // Sending password to authenticate
-                }),
-                success: function(response) {
-                    debugger
-                    // Store the JWT token
-                    var token = response.token;
-                    localStorage.setItem("jwtToken", token);
+        //     // First AJAX call to authenticate and get the JWT token
+        //     $.ajax({
+        //         url: "https://localhost:7057/api/v1/auth/login",
+        //         type: "POST",
+        //         contentType: "application/json",
+        //         data: JSON.stringify({
+        //             username: $("#email").val(),  // Sending username to get the token
+        //             password: $("#password").val() // Sending password to authenticate
+        //         }),
+        //         success: function (response) {
+        //             debugger
+        //             // Store the JWT token
+        //             var token = response.token;
+        //             localStorage.setItem("jwtToken", token);
 
-                    // Second AJAX call to log in using the JWT token
-                    $.ajax({
-                        url: "https://localhost:7058/Home/Login",
-                        type: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify({
-                            token: token // Pass the JWT token as data
-                        }),
-                        success: function() {
-                            // Redirect to the Index page
-                            // window.location.href = "https://localhost:7058/Home/Index";
-                        },
-                        error: function() {
-                            console.error("Failed to authenticate with JWT token.");
-                        }
-                    });
-                },
-                error: function() {
-                    $("#errorMessage").text("Invalid credentials.");
-                }
-            });
+        //             // Second AJAX call to log in using the JWT token
+        //             $.ajax({
+        //                 url: "https://localhost:7058/Home/Login",
+        //                 type: "POST",
+        //                 contentType: "application/json",
+        //                 data: JSON.stringify({
+        //                     token: token // Pass the JWT token as data
+        //                 }),
+        //                 success: function () {
+        //                     // Redirect to the Index page
+        //                     // window.location.href = "https://localhost:7058/Home/Index";
+        //                 },
+        //                 error: function () {
+        //                     console.error("Failed to authenticate with JWT token.");
+        //                 }
+        //             });
+        //         },
+        //         error: function () {
+        //             $("#errorMessage").text("Invalid credentials.");
+        //         }
+        //     });
+        // });
+
+
+        /*
+        localStorage.setItem("jwtToken", response.token);
+        window.location.href = "https://localhost:7058/Home/Index";  // Use the correct base URL
+        },
+        error: function() {
+            debugger
+            $("#errorMessage").text("Invalid credentials"); // Display error message
+        }
         });
-
-        
-                /*
-                localStorage.setItem("jwtToken", response.token);
-                window.location.href = "https://localhost:7058/Home/Index";  // Use the correct base URL
-                },
-                error: function() {
-                    debugger
-                    $("#errorMessage").text("Invalid credentials"); // Display error message
-                }
-            });
         });
         */
     </script>
