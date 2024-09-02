@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (web)",
+            "name": ".NET Core Launch (API)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Myapp/bin/Debug/net8.0/Myapp.dll",
+            "program": "${workspaceFolder}/MyAppAPI/bin/Debug/net8.0/MyAppAPI.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Myapp",
+            "cwd": "${workspaceFolder}/MyAppAPI",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -25,13 +25,13 @@
             }
         },
         {
-            "name": ".NET Core Launch (API)",
+            "name": ".NET Core Launch (CLIENT)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Myapp_api/bin/Debug/net8.0/Myapp.dll",
+            "program": "${workspaceFolder}/MyAppClient/bin/Debug/net8.0/MyAppClient.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Myapp_api",
+            "cwd": "${workspaceFolder}/MyAppClient",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",

@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:5210",
+                          policy.WithOrigins(
                           "https://localhost:7058")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
@@ -47,11 +47,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add authorization policies
-// builder.Services.AddAuthorization(options =>
-// {
-//     options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-// });
 
 // Add Swagger services
 builder.Services.AddEndpointsApiExplorer();

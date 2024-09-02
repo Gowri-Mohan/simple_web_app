@@ -31,22 +31,16 @@
 
 <script>
     $(document).ready(function() {
-        // Check if a JWT token is present in localStorage
-        const token = localStorage.getItem("jwtToken");
+        // Retrieve the JWT token from the ViewBag
+        var token = '@ViewBag.Token';
 
-        if (!token) {
-            alert("You must be logged in to view this content.");
-            window.location.href = "/Account/Login"; // Redirect to login if no token
-            return;
-        }
-
-        // Function to load users via AJAX with JWT token
+        // Function to load users via AJAX
         function loadUsers() {
             $.ajax({
-                url: '/api/v1/users',
+                url: 'https://localhost:7057/api/v1/users',
                 type: 'GET',
                 headers: {
-                    "Authorization": "Bearer " + token
+                    'Authorization': 'Bearer ' + token
                 },
                 success: function(users) {
                     var rows = '';
@@ -62,8 +56,13 @@
                     });
                     $('#userTable tbody').html(rows);
                 },
-                error: function() {
-                    alert('Failed to load users. Please ensure you are logged in with a valid token.');
+                error: function(xhr) {
+                    if (xhr.status === 401) {
+                        alert('Session expired or invalid token. Please log in again.');
+                        window.location.href = "/Account/Login";
+                    } else {
+                        alert('Failed to load users. Please ensure you are logged in with a valid token.');
+                    }
                 }
             });
         }
@@ -78,18 +77,23 @@
             var emailId = row.find('.emailInput').val();
 
             $.ajax({
-                url: '/api/v1/users/' + id,
+                url: 'https://localhost:7057/api/v1/users/' + id,
                 type: 'PUT',
-                contentType: 'application/json',
                 headers: {
-                    "Authorization": "Bearer " + token
+                    'Authorization': 'Bearer ' + token
                 },
+                contentType: 'application/json',
                 data: JSON.stringify({ id: id, emailId: emailId }),
                 success: function() {
                     alert('User updated successfully');
                 },
-                error: function() {
-                    alert('Error updating user');
+                error: function(xhr) {
+                    if (xhr.status === 401) {
+                        alert('Session expired or invalid token. Please log in again.');
+                        window.location.href = "/Account/Login";
+                    } else {
+                        alert('Error updating user');
+                    }
                 }
             });
         });
@@ -100,17 +104,22 @@
             var id = row.data('id');
 
             $.ajax({
-                url: '/api/v1/users/' + id,
+                url: 'https://localhost:7057/api/v1/users/' + id,
                 type: 'DELETE',
                 headers: {
-                    "Authorization": "Bearer " + token
+                    'Authorization': 'Bearer ' + token
                 },
                 success: function() {
                     row.remove();
                     alert('User deleted successfully');
                 },
-                error: function() {
-                    alert('Error deleting user');
+                error: function(xhr) {
+                    if (xhr.status === 401) {
+                        alert('Session expired or invalid token. Please log in again.');
+                        window.location.href = "/Account/Login";
+                    } else {
+                        alert('Error deleting user');
+                    }
                 }
             });
         });
@@ -120,12 +129,12 @@
             var emailId = prompt('Enter user email ID:');
             if (emailId) {
                 $.ajax({
-                    url: '/api/v1/users',
+                    url: 'https://localhost:7057/api/v1/users',
                     type: 'POST',
-                    contentType: 'application/json',
                     headers: {
-                        "Authorization": "Bearer " + token
+                        'Authorization': 'Bearer ' + token
                     },
+                    contentType: 'application/json',
                     data: JSON.stringify({ emailId: emailId }),
                     success: function(result) {
                         var newRow = `<tr data-id="${result.id}">
@@ -138,11 +147,21 @@
                                       </tr>`;
                         $('#userTable tbody').append(newRow);
                     },
-                    error: function() {
-                        alert('Error adding user');
+                    error: function(xhr) {
+                        if (xhr.status === 401) {
+                            alert('Session expired or invalid token. Please log in again.');
+                            window.location.href = "/Account/Login";
+                        } else {
+                            alert('Error adding user');
+                        }
                     }
                 });
             }
         });
     });
 </script>
+
+
+
+
+

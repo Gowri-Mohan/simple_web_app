@@ -14,6 +14,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace MyAppClient.Controllers
 {
@@ -80,24 +81,68 @@ namespace MyAppClient.Controllers
             }
             return View();
         }
-
+        
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Login(string username, string password)
         {
             try
             {
-                //HttpClient client =new()
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7057/api/v1/auth/login")
+                    {
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(new { username, password }),
+                            Encoding.UTF8,
+                            "application/json")
+                    };
 
-                // Redirect to home page or another secure page
-                return RedirectToAction("Index", "Home");
+                    var response = await client.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+
+                    var content = await response.Content.ReadAsStringAsync();
+                    var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(content);
+
+                    if (tokenResponse != null && !string.IsNullOrEmpty(tokenResponse.Token))
+                    {
+                        // Store JWT token in cookie
+                        Response.Cookies.Append("AuthToken", tokenResponse.Token, new CookieOptions
+                        {
+                            HttpOnly = true,
+                            Secure = true, // Ensure this is true in production
+                            SameSite = SameSiteMode.Strict
+                        });
+
+                       // Set authentication cookie manually
+                        var claims = new[] { new Claim(ClaimTypes.Name, username) };
+                            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var authProperties = new AuthenticationProperties
+                        {
+                            IsPersistent = true,
+                        };
+
+
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new 
+                        ClaimsPrincipal(claimsIdentity), authProperties);
+
+                        // Redirect to home page
+                            return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return View();
+                    }
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred during login.");
                 ModelState.AddModelError(string.Empty, "An error occurred: " + ex.Message);
+                return View();
             }
-            return View();
         }
+
 
 
         [HttpPost]
@@ -124,5 +169,6 @@ namespace MyAppClient.Controllers
         }
     }
 }
+
 
 
