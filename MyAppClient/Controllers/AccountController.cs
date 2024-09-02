@@ -48,30 +48,36 @@ namespace MyAppClient.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                // Ensure the email and password are not empty
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 {
-                    var existingUser = await _context.Users
-                        .SingleOrDefaultAsync(u => u.EmailId == email);
+                    ModelState.AddModelError(string.Empty, "Email and password are required.");
+                    return View();
+                }
 
-                    if (existingUser != null)
+                using (var client = new HttpClient())
+                {
+                    // Send a request to the external API to create a new user
+                    var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7057/api/v1/auth/signup")
                     {
-                        ModelState.AddModelError(string.Empty, "User already exists");
-                        return View();
-                    }
-
-                    var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
-
-                    var newUser = new User
-                    {
-                        EmailId = email,
-                        Password = hashedPassword, // Store the hashed password
-                        Role = "User" // Set default role as 'User'
+                        Content = new StringContent(
+                            JsonConvert.SerializeObject(new { email, password }),
+                            Encoding.UTF8,
+                            "application/json")
                     };
 
-                    _context.Users.Add(newUser);
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToAction("Login");
+                    var response = await client.SendAsync(request);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Optionally, handle successful signup (e.g., redirect to login page)
+                        return RedirectToAction("Login");
+                    }
+                    else
+                    {
+                        // Read and display error message from the API response
+                        var errorContent = await response.Content.ReadAsStringAsync();
+                        ModelState.AddModelError(string.Empty, $"Error: {errorContent}");
+                    }
                 }
             }
             catch (Exception ex)
@@ -79,8 +85,10 @@ namespace MyAppClient.Controllers
                 _logger.LogError(ex, "An error occurred while signing up a user.");
                 ModelState.AddModelError(string.Empty, "An error occurred: " + ex.Message);
             }
+
             return View();
         }
+
         
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
