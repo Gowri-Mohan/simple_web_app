@@ -11,6 +11,11 @@ services:
     ports:
       - 5211:5211
 #      - 7057:7057
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Username=gowri;Password=pass;Database=myapp;
+    depends_on:
+      - postgres
   myappclient:
     image: myappclient
     build:
@@ -19,3 +24,13 @@ services:
     ports:
       - 5210:5210
 #      - 7058:7058
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_USER=gowri
+      - POSTGRES_DB=myapp
