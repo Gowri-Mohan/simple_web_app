@@ -1,10 +1,10 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 5211
-EXPOSE 7057
+#EXPOSE 7057
 
 ENV ASPNETCORE_URLS=http://+:5211
-ENV ASPNETCORE_URLS=https://+:7057
+#ENV ASPNETCORE_URLS=https://+:7057
 
 USER app
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build

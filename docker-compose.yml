@@ -9,13 +9,13 @@ services:
       context: .
       dockerfile: MyAppAPI/Dockerfile
     ports:
-      - 5210:5210
-      - 7057:7057
+      - 5211:5211
+#      - 7057:7057
   myappclient:
     image: myappclient
     build:
       context: .
       dockerfile: MyAppClient/Dockerfile
     ports:
-      - 5211:5211
-      - 7058:7058
+      - 5210:5210
+#      - 7058:7058
