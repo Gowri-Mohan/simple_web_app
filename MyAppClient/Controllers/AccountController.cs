@@ -1,18 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Logging;
 using MyAppClient.Models;
 using MyAppClient.data;
-using System.Threading.Tasks;
-using System.Linq;
-using BCrypt.Net;
 using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
-using System.IdentityModel.Tokens.Jwt;
 using System.Diagnostics;
 using Newtonsoft.Json;
 
@@ -58,7 +50,7 @@ namespace MyAppClient.Controllers
                 using (var client = new HttpClient())
                 {
                     // Send a request to the external API to create a new user
-                    var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7057/api/v1/auth/signup")
+                    var request = new HttpRequestMessage(HttpMethod.Post, "http://myappapi:5211/api/v1/auth/signup")
                     {
                         Content = new StringContent(
                             JsonConvert.SerializeObject(new { email, password }),
@@ -97,7 +89,7 @@ namespace MyAppClient.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7057/api/v1/auth/login")
+                    var request = new HttpRequestMessage(HttpMethod.Post, "http://myappapi:5211/api/v1/auth/login")
                     {
                         Content = new StringContent(
                             JsonConvert.SerializeObject(new { username, password }),

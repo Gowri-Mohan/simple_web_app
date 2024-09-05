@@ -97,7 +97,7 @@
 
         //     // First AJAX call to authenticate and get the JWT token
         //     $.ajax({
-        //         url: "https://localhost:7057/api/v1/auth/login",
+        //         url: "http://myappapi:5211/api/v1/auth/login",
         //         type: "POST",
         //         contentType: "application/json",
         //         data: JSON.stringify({
@@ -112,7 +112,7 @@
 
         //             // Second AJAX call to log in using the JWT token
         //             $.ajax({
-        //                 url: "https://localhost:7058/Home/Login",
+        //                 url: "http://myappapi:5211/Home/Login",
         //                 type: "POST",
         //                 contentType: "application/json",
         //                 data: JSON.stringify({
@@ -120,7 +120,7 @@
         //                 }),
         //                 success: function () {
         //                     // Redirect to the Index page
-        //                     // window.location.href = "https://localhost:7058/Home/Index";
+        //                     // window.location.href = "http://myappapi:5211/Home/Index";
         //                 },
         //                 error: function () {
         //                     console.error("Failed to authenticate with JWT token.");
