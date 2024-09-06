@@ -120,7 +120,7 @@ namespace MyAppClient.Controllers
                         {
                             IsPersistent = true,
                         };
-
+                        
 
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new 
                         ClaimsPrincipal(claimsIdentity), authProperties);
