@@ -131,7 +131,6 @@ namespace MyAppClient.Controllers
                     else
                     {
                         ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                        return View();
                     }
                 }
             }
@@ -139,11 +138,10 @@ namespace MyAppClient.Controllers
             {
                 _logger.LogError(ex, "An error occurred during login.");
                 ModelState.AddModelError(string.Empty, "An error occurred: " + ex.Message);
-                return View();
             }
+
+            return View();
         }
-
-
 
         [HttpPost]
         public async Task<IActionResult> Logout()
